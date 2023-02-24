@@ -53,6 +53,9 @@ jobs:
           sudo apt install -y -o Acquire::Retries=50 \
                            mtools syslinux isolinux \
                            libc6-dev-i386 libc6-dbg:i386 valgrind
+      - name: Version
+        run: |
+          make -C src v
       - name: Build (BIOS)
         run: |
           make -j 4 -C src
@@ -86,6 +89,9 @@ jobs:
           sudo apt update
           sudo apt install -y -o Acquire::Retries=50 \
                            mtools syslinux isolinux gcc-arm-none-eabi
+      - name: Version
+        run: |
+          make -C src v
       - name: Build
         run: |
           make -j 4 -C src CROSS=arm-none-eabi- \
@@ -115,6 +121,9 @@ jobs:
           sudo apt update
           sudo apt install -y -o Acquire::Retries=50 \
                            mtools syslinux isolinux gcc-aarch64-linux-gnu
+      - name: Version
+        run: |
+          make -C src v
       - name: Build
         run: |
           make -j 4 -C src CROSS=aarch64-linux-gnu- \
