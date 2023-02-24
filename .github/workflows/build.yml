@@ -2,9 +2,6 @@ name: Build
 
 on: push
 
-- uses: travisj/build-number-action@v1
-  id: my-project-build-number
-
 env:
   VERSIONS: ${{ steps.my-project-build-number.outputs.build-number }}                           
 jobs:
@@ -13,6 +10,9 @@ jobs:
     name: Cache
     runs-on: ubuntu-22.04
     steps:
+      - name: Build number
+        uses: travisj/build-number-action@v1
+        id: my-project-build-number
       - name: Cache permissions
         run: |
           sudo chown $(id -un) /var/cache/apt/archives
