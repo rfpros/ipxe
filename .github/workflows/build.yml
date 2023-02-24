@@ -2,6 +2,11 @@ name: Build
 
 on: push
 
+- uses: travisj/build-number-action@v1
+  id: my-project-build-number
+
+env:
+  VERSIONS: ${{ steps.my-project-build-number.outputs.build-number }}                           
 jobs:
 
   cache:
@@ -52,10 +57,10 @@ jobs:
                            libc6-dev-i386 libc6-dbg:i386 valgrind
       - name: Build (BIOS)
         run: |
-          make -j 4 VERSIONS=0.0.2 -C src
+          make -j 4 -C src
       - name: Build (Everything)
         run: |
-          make -j 4 VERSIONS=0.0.2 -C src everything
+          make -j 4 -C src everything
       - name: Test
         run: |
           valgrind ./src/bin-i386-linux/tests.linux
@@ -85,7 +90,7 @@ jobs:
                            mtools syslinux isolinux gcc-arm-none-eabi
       - name: Build
         run: |
-          make -j 4 VERSIONS=0.0.2 -C src CROSS=arm-none-eabi- \
+          make -j 4 -C src CROSS=arm-none-eabi- \
                bin-arm32-efi/intel.efi \
                bin-arm32-efi/intel.usb \
                bin-arm32-efi/intel.iso
@@ -114,7 +119,7 @@ jobs:
                            mtools syslinux isolinux gcc-aarch64-linux-gnu
       - name: Build
         run: |
-          make -j 4 -C src VERSIONS=v0.0.2 CROSS=aarch64-linux-gnu- \
+          make -j 4 -C src CROSS=aarch64-linux-gnu- \
                bin-arm64-efi/ipxe.efi \
                bin-arm64-efi/ipxe.usb \
                bin-arm64-efi/ipxe.iso
