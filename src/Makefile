@@ -205,6 +205,9 @@ configure :
 install :
 	@$(ECHO) "No installation required."
 
+v:
+	@$(ECHO) "Version ${VERSIONS}"
+
 ###############################################################################
 #
 # Version number calculations
