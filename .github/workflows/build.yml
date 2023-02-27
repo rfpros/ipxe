@@ -106,7 +106,6 @@ jobs:
                bin-arm32-efi/intel.iso v
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with: 
           files: |
                src/bin-arm32-efi/intel.efi
