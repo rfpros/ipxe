@@ -106,6 +106,7 @@ jobs:
                bin-arm32-efi/intel.iso v
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with: 
           files: |
                src/bin-arm32-efi/intel.efi
@@ -145,6 +146,6 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            bin-arm64-efi/ipxe.efi
-            bin-arm64-efi/ipxe.usb
-            bin-arm64-efi/ipxe.iso
+            src/bin-arm64-efi/ipxe.efi
+            src/bin-arm64-efi/ipxe.usb
+            src/bin-arm64-efi/ipxe.iso
