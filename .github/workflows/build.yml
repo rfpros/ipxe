@@ -28,6 +28,17 @@ jobs:
                            mtools syslinux isolinux \
                            libc6-dev-i386 valgrind \
                            gcc-arm-none-eabi gcc-aarch64-linux-gnu
+      - name: Create draft release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: tag_test
+          release_name: ${{ env.VERSIONS }}
+          draft: true
+          prerelease: false
+
 
   x86:
     name: x86
@@ -92,6 +103,26 @@ jobs:
                bin-arm32-efi/intel.efi \
                bin-arm32-efi/intel.usb \
                bin-arm32-efi/intel.iso v
+      - name: Create draft release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: tag_test
+          release_name: ${{ env.VERSIONS }}
+          draft: true
+          prerelease: false
+      - name: Upload
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: src/bin-arm32-efi/intel.efi
+          asset_name: bin-arm32-efi/intel.efi
+          asset_content_type: application/zip
+
 
   arm64:
     name: ARM64
@@ -121,3 +152,11 @@ jobs:
                bin-arm64-efi/ipxe.efi \
                bin-arm64-efi/ipxe.usb \
                bin-arm64-efi/ipxe.iso v
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            bin-arm64-efi/ipxe.efi
+            bin-arm64-efi/ipxe.usb
+            bin-arm64-efi/ipxe.iso
