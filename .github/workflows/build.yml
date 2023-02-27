@@ -142,16 +142,11 @@ jobs:
                bin-arm64-efi/ipxe.efi \
                bin-arm64-efi/ipxe.usb \
                bin-arm64-efi/ipxe.iso v
-
-  publish:
-    name: Publish release
-    runs-on: ubuntu-22.04
-    needs: x86 arm32 arm64
-    steps:
-      - name: Publish
-        uses: eregon/publish-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          release_id: ${{ steps.create_release.outputs.id }}
-
+          files: |
+            bin-arm64-efi/ipxe.efi
+            bin-arm64-efi/ipxe.usb
+            bin-arm64-efi/ipxe.iso
