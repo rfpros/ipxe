@@ -107,7 +107,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
-        with:
+        with: |
                src/bin-arm32-efi/intel.efi
                src/bin-arm32-efi/intel.usb
                src/bin-arm32-efi/intel.iso
