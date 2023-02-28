@@ -67,14 +67,14 @@ jobs:
       - name: Build (BIOS)
         run: |
           echo Removing redundant processing
-          echo make -j 4 -C src
+          make -j 4 -C src EMBED=../script/script.ipxe
       - name: Build (Everything)
         run: |
-          echo make -j 4 -C src everything v
+          make -j 4 -C src EMBED=../script/script.ipxe everything v
       - name: Test
         run: |
-          echo valgrind ./src/bin-i386-linux/tests.linux
-          echo valgrind ./src/bin-x86_64-linux/tests.linux
+          valgrind ./src/bin-i386-linux/tests.linux
+          valgrind ./src/bin-x86_64-linux/tests.linux
 
   arm32:
     name: ARM32
@@ -101,6 +101,7 @@ jobs:
       - name: Build
         run: |
           make -j 4 -C src CROSS=arm-none-eabi- \
+               EMBED=../script/script.ipxe \
                bin-arm32-efi/intel.efi \
                bin-arm32-efi/intel.usb \
                bin-arm32-efi/intel.iso v
@@ -111,7 +112,6 @@ jobs:
           files: |
                src/bin-arm32-efi/intel.efi
                src/bin-arm32-efi/intel.usb
-               src/bin-arm32-efi/intel.iso
 
   arm64:
     name: ARM64
@@ -138,6 +138,7 @@ jobs:
       - name: Build
         run: |
           make -j 4 -C src CROSS=aarch64-linux-gnu- \
+               EMBED=../script/script.ipxe \
                bin-arm64-efi/ipxe.efi \
                bin-arm64-efi/ipxe.usb \
                bin-arm64-efi/ipxe.iso v
