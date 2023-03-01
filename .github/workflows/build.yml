@@ -28,17 +28,6 @@ jobs:
                            mtools syslinux isolinux \
                            libc6-dev-i386 valgrind \
                            gcc-arm-none-eabi gcc-aarch64-linux-gnu
-      - name: Create draft release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: tag_test
-          release_name: ${{ env.VERSIONS }}
-          draft: true
-          prerelease: false
-
 
   x86:
     name: x86
@@ -66,7 +55,6 @@ jobs:
                            libc6-dev-i386 libc6-dbg:i386 valgrind
       - name: Build (BIOS)
         run: |
-          echo Removing redundant processing
           make -j 4 -C src EMBED=../script/script.ipxe
       - name: Build (Everything)
         run: |
