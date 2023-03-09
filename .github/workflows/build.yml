@@ -2,6 +2,9 @@ name: Build
 
 on: push
 
+env:
+  VERSIONS: v.0.0.${{ github.run_number }}
+
 jobs:
 
   cache:
@@ -52,10 +55,10 @@ jobs:
                            libc6-dev-i386 libc6-dbg:i386 valgrind
       - name: Build (BIOS)
         run: |
-          make -j 4 -C src
+          make -j 4 -C src EMBED=../script/script.ipxe
       - name: Build (Everything)
         run: |
-          make -j 4 -C src everything
+          make -j 4 -C src EMBED=../script/script.ipxe everything v
       - name: Test
         run: |
           valgrind ./src/bin-i386-linux/tests.linux
@@ -86,9 +89,17 @@ jobs:
       - name: Build
         run: |
           make -j 4 -C src CROSS=arm-none-eabi- \
+               EMBED=../script/script.ipxe \
                bin-arm32-efi/intel.efi \
                bin-arm32-efi/intel.usb \
-               bin-arm32-efi/intel.iso
+               bin-arm32-efi/intel.iso v
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with: 
+          files: |
+               src/bin-arm32-efi/intel.efi
+               src/bin-arm32-efi/intel.usb
 
   arm64:
     name: ARM64
@@ -115,6 +126,15 @@ jobs:
       - name: Build
         run: |
           make -j 4 -C src CROSS=aarch64-linux-gnu- \
+               EMBED=../script/script.ipxe \
                bin-arm64-efi/ipxe.efi \
                bin-arm64-efi/ipxe.usb \
-               bin-arm64-efi/ipxe.iso
+               bin-arm64-efi/ipxe.iso v
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            src/bin-arm64-efi/ipxe.efi
+            src/bin-arm64-efi/ipxe.usb
+            src/bin-arm64-efi/ipxe.iso
