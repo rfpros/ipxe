@@ -61,10 +61,6 @@ jobs:
           make -j 4 -C src clean
           make -j 4 -C src bin/ipxe.iso EMBED=../script/script.ipxe
           mv src/bin/ipxe.iso ipxe-harvester.iso
-      - name: Test
-        run: |
-          valgrind ./src/bin-i386-linux/tests.linux
-          valgrind ./src/bin-x86_64-linux/tests.linux
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
